@@ -166,7 +166,7 @@ express()
         if(!task) {
             await Task.create({
                 user_id: userId,
-                task_id: req.body.id,
+                task_id: req.body.task_id,
                 title: req.body.title,
                 url: req.body.url,
                 created: new Date(),
