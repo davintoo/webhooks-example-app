@@ -4,7 +4,7 @@ const path = require('path')
 const {Sequelize, Model, DataTypes} = require('sequelize');
 const PORT = process.env.PORT || 5000
 
-const userId = 1;
+const userId = 12;
 const secret = process.env.SECRET;
 
 const config = {
@@ -104,6 +104,10 @@ express()
             });
             return;
         }
+        if (req.body.user_id !== userId) {
+            res.json({OK: true});//ignore this user
+            return;
+        }
         let rating = await UserRating.findOne({
             where: {
                 user_id: userId
@@ -128,7 +132,10 @@ express()
             });
             return;
         }
-
+        if (req.body.user.id !== userId) {
+            res.json({OK: true});//ignore this user
+            return;
+        }
         await Notification.create({
             user_id: userId,
             subject: req.body.subject,
@@ -146,10 +153,14 @@ express()
             });
             return;
         }
+        if (req.body.user_id !== userId) {
+            res.json({OK: true});//ignore this user
+            return;
+        }
         const task = await Task.findOne({
             where: {
                 user_id: userId,
-                task_id: req.body.id
+                task_id: req.body.task_id
             }
         });
         if(!task) {
@@ -172,9 +183,13 @@ express()
             });
             return;
         }
+        if (req.body.user_id !== userId) {
+            res.json({OK: true});//ignore this user
+            return;
+        }
         await Task.destroy({
             user_id: userId,
-            task_id: req.body.id
+            task_id: req.body.task_id
         });
         res.json({OK: true});
     })
