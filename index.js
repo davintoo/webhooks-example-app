@@ -15,7 +15,7 @@ const config = {
     database: process.env.MYSQL_DATABASE || '',
     dialect: "mysql"
 };
-// console.log('config', config);
+console.log('config', config);
 
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
