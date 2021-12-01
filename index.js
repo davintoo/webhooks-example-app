@@ -73,7 +73,9 @@ Task.init({
 }, {sequelize, modelName: 'Task'});
 
 (async () => {
-    await sequelize.sync();
+    await sequelize.sync({
+        force: true
+    });
 })();
 
 const checkSecret = (req, res) => {
