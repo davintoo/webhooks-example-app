@@ -39,9 +39,9 @@
     <div class="row align-items-md-stretch">
       <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>My tasks</h2>
+          <h2>My tasks <small>(<%= tasks.count %>)</h2>
           <ul class="list-group">
-            <% tasks.forEach(function(task) { %>
+            <% tasks.rows.forEach(function(task) { %>
                   <li class="list-group-item"><%= task.title %></li>
             <% }); %>
           </ul>
@@ -49,9 +49,9 @@
       </div>
       <div class="col-md-6">
         <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>My notifications</h2>
+          <h2>My notifications <small>(<%= notifications.count %>)</small></h2>
           <ul class="list-group">
-            <% notifications.forEach(function(notification) { %>
+            <% notifications.rows.forEach(function(notification) { %>
                   <li class="list-group-item"><%= notification.subject %></li>
             <% }); %>
           </ul>

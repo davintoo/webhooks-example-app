@@ -5,7 +5,13 @@ const {Sequelize, Model, DataTypes} = require('sequelize');
 const PORT = process.env.PORT || 5000
 
 const userId = 12;
-const secret = process.env.SECRET;
+let secrets = {};
+try {
+    secrets = JSON.parse(process.env.SECRETS || '{}');
+} catch (err) {
+    console.error(err);
+}
+console.log('secrets', secrets);
 
 const config = {
     host: process.env.MYSQL_SERVER || '127.0.0.1',
@@ -15,7 +21,7 @@ const config = {
     database: process.env.MYSQL_DATABASE || '',
     dialect: "mysql"
 };
-console.log('config', config);
+// console.log('config', config);
 
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
@@ -69,6 +75,16 @@ Task.init({
     await sequelize.sync();
 })();
 
+const checkSecret = (req, res) => {
+    const reqSecret = req.body.secret || '';
+    if (!secrets[req.url] || secrets[req.url] !== reqSecret) {
+        res.status(403).json({
+            message: 'Permission denied'
+        });
+        return false;
+    }
+    return true;
+};
 
 express()
     .use(express.static(path.join(__dirname, 'public')))
@@ -76,11 +92,7 @@ express()
     .set('views', path.join(__dirname, 'views'))
     .set('view engine', 'ejs')
     .post('/api/clear', async (req, res) => {
-        const reqSecret = req.body.secret || '';
-        if (reqSecret !== secret) {
-            res.status(403).json({
-                message: 'Permission denied'
-            });
+        if (!checkSecret(req, res)) {
             return;
         }
 
@@ -97,13 +109,10 @@ express()
         res.json({OK: true});
     })
     .post('/api/rating', async (req, res) => {
-        const reqSecret = req.body.secret || '';
-        if (reqSecret !== secret) {
-            res.status(403).json({
-                message: 'Permission denied'
-            });
+        if (!checkSecret(req, res)) {
             return;
         }
+
         if (req.body.user_id !== userId) {
             res.json({OK: true});//ignore this user
             return;
@@ -125,13 +134,10 @@ express()
         res.json({OK: true});
     })
     .post('/api/notifications', async (req, res) => {
-        const reqSecret = req.body.secret || '';
-        if (reqSecret !== secret) {
-            res.status(403).json({
-                message: 'Permission denied'
-            });
+        if (!checkSecret(req, res)) {
             return;
         }
+
         if (req.body.user.id !== userId) {
             res.json({OK: true});//ignore this user
             return;
@@ -146,13 +152,10 @@ express()
         res.json({OK: true});
     })
     .post('/api/tasks/assign', async (req, res) => {
-        const reqSecret = req.body.secret || '';
-        if (reqSecret !== secret) {
-            res.status(403).json({
-                message: 'Permission denied'
-            });
+        if (!checkSecret(req, res)) {
             return;
         }
+
         if (req.body.user_id !== userId) {
             res.json({OK: true});//ignore this user
             return;
@@ -163,7 +166,7 @@ express()
                 task_id: req.body.task_id
             }
         });
-        if(!task) {
+        if (!task) {
             await Task.create({
                 user_id: userId,
                 task_id: req.body.task_id,
@@ -176,13 +179,10 @@ express()
         res.json({OK: true});
     })
     .post('/api/tasks/unassign', async (req, res) => {
-        const reqSecret = req.body.secret || '';
-        if (reqSecret !== secret) {
-            res.status(403).json({
-                message: 'Permission denied'
-            });
+        if (!checkSecret(req, res)) {
             return;
         }
+
         if (req.body.user_id !== userId) {
             res.json({OK: true});//ignore this user
             return;
@@ -199,15 +199,17 @@ express()
                 user_id: userId
             }
         });
-        const notifications = await Notification.findAll({
+        const notifications = await Notification.findAndCountAll({
             where: {
                 user_id: userId
-            }
+            },
+            limit: 5
         });
-        const tasks = await Task.findAll({
+        const tasks = await Task.findAndCountAll({
             where: {
                 user_id: userId
-            }
+            },
+            limit: 5
         });
         res.render('pages/index', {
             rating: rating ? rating.value : 0,
