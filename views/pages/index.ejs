@@ -42,7 +42,11 @@
           <h2>My tasks <small>(<%= tasks.count %>)</small></h2>
           <ul class="list-group">
             <% tasks.rows.forEach(function(task) { %>
-                  <li class="list-group-item"><%= task.title %></li>
+              <li class="list-group-item">
+              <%= task.title %>
+              <% if (task.status == 'finished') { %><span class="badge bg-success">OK</span><% } %>
+              <% if (task.status == 'fail') { %><span class="badge bg-danger">Fail</span><% } %>
+              </li>
             <% }); %>
           </ul>
         </div>

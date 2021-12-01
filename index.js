@@ -67,6 +67,7 @@ Task.init({
     user_id: {type: DataTypes.INTEGER(10).UNSIGNED},
     task_id: {type: DataTypes.INTEGER(10).UNSIGNED},
     title: {type: DataTypes.TEXT},
+    status: {type: DataTypes.TEXT},
     url: {type: DataTypes.TEXT},
     created: {type: DataTypes.DATE},
 }, {sequelize, modelName: 'Task'});
@@ -188,6 +189,25 @@ express()
             return;
         }
         await Task.destroy({
+            where: {
+                user_id: userId,
+                task_id: req.body.task_id
+            }
+        });
+        res.json({OK: true});
+    })
+    .post('/api/tasks/change-status', async (req, res) => {
+        if (!checkSecret(req, res)) {
+            return;
+        }
+
+        if (req.body.user_id !== userId) {
+            res.json({OK: true});//ignore this user
+            return;
+        }
+        await Task.update({
+            status: req.body.status
+        }, {
             where: {
                 user_id: userId,
                 task_id: req.body.task_id
