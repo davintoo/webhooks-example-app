@@ -26,9 +26,9 @@ const config = {
 
 const sequelize = new Sequelize(config.database, config.username, config.password, {
     logging: (str, params) => {
-        if (process.env.NODE_ENV === 'development') {
+        //if (process.env.NODE_ENV === 'development') {
             console.debug(str, params.bind);
-        }
+       // }
     },
     define: {
         timestamps: false,
