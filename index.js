@@ -74,7 +74,7 @@ Task.init({
 
 (async () => {
     await sequelize.sync({
-        force: true
+        alter: true
     });
 })();
 
