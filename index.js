@@ -188,8 +188,10 @@ express()
             return;
         }
         await Task.destroy({
-            user_id: userId,
-            task_id: req.body.task_id
+            where: {
+                user_id: userId,
+                task_id: req.body.task_id
+            }
         });
         res.json({OK: true});
     })
