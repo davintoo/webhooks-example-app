@@ -1,74 +1,68 @@
 <!doctype html>
 <html lang="en">
-  <head>
-  <%- include ("../partials/header.ejs") %>
-  </head>
-  <body>
-
-<main>
-  <div class="container py-4">
-
-    <%- include ("../partials/nav.ejs") %>
-
-    <div class="p-5 mb-4 bg-light rounded-3">
-      <div class="container-fluid py-3 d-flex justify-content-center align-items-center">
-            <div class="card">
-                <div class="upper"> <img src="/bg.png" class="img-fluid"> </div>
-                <div class="user text-center">
-                    <div class="profile"> <img src="/avatar.jpeg" class="rounded-circle" width="80"> </div>
-                </div>
-                <div class="mt-5 text-center">
-                    <h4 class="mb-0">Susan Calvin</h4>
-                     <span class="text-muted d-block mb-2">Los Alamos</span>
-                    <div class="d-flex justify-content-between align-items-center mt-4 px-4">
-                        <div class="stats">
-                            <h6 class="mb-0">Learning rating</h6> <span><%= rating %></span>
-                        </div>
-                        <div class="stats">
-                            <h6 class="mb-0">Sales rating</h6> <span>142</span>
-                        </div>
-                        <div class="stats">
-                            <h6 class="mb-0">Ranks</h6> <span>129</span>
+    <head>
+    <%- include ("../partials/header.ejs") %>
+    </head>
+    <body>
+    <main>
+      <div class="container py-4">
+        <%- include ("../partials/nav.ejs") %>
+        <div class="p-5 mb-4 bg-light rounded-3">
+          <div class="container-fluid py-3 d-flex justify-content-center align-items-center">
+                <div class="card">
+                    <div class="upper"> <img src="/bg.png" class="img-fluid"> </div>
+                    <div class="user text-center">
+                        <div class="profile"> <img src="/avatar.jpeg" class="rounded-circle" width="80"> </div>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <h4 class="mb-0">Susan Calvin</h4>
+                         <span class="text-muted d-block mb-2">Los Alamos</span>
+                        <div class="d-flex justify-content-between align-items-center mt-4 px-4">
+                            <div class="stats">
+                                <h6 class="mb-0">Learning rating</h6> <span><%= rating %></span>
+                            </div>
+                            <div class="stats">
+                                <h6 class="mb-0">Sales rating</h6> <span>142</span>
+                            </div>
+                            <div class="stats">
+                                <h6 class="mb-0">Ranks</h6> <span>129</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="row align-items-md-stretch">
-      <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>My tasks <small>(<%= tasks.count %>)</small></h2>
-          <ul class="list-group">
-            <% tasks.rows.forEach(function(task) { %>
-              <li class="list-group-item">
-              <%= task.title %>
-              <% if (task.status == 'finished') { %><span class="badge bg-success">OK</span><% } %>
-              <% if (task.status == 'fail') { %><span class="badge bg-danger">Fail</span><% } %>
-              </li>
-            <% }); %>
-          </ul>
+        <div class="row align-items-md-stretch">
+          <div class="col-md-6">
+            <div class="h-100 p-5 bg-light border rounded-3">
+              <h2>My tasks <small>(<%= tasks.count %>)</small></h2>
+              <ul class="list-group">
+                <% tasks.rows.forEach(function(task) { %>
+                  <li class="list-group-item">
+                  <%= task.title %>
+                  <% if (task.status == 'finished') { %><span class="badge bg-success">OK</span><% } %>
+                  <% if (task.status == 'fail') { %><span class="badge bg-danger">Fail</span><% } %>
+                  </li>
+                <% }); %>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="h-100 p-5 bg-light border rounded-3">
+              <h2>My notifications <small>(<%= notifications.count %>)</small></h2>
+              <ul class="list-group">
+                <% notifications.rows.forEach(function(notification) { %>
+                      <li class="list-group-item"><%= notification.subject %></li>
+                <% }); %>
+              </ul>
+            </div>
+          </div>
         </div>
+        <footer class="pt-3 mt-4 text-muted border-top">
+          &copy; 2021
+        </footer>
       </div>
-      <div class="col-md-6">
-        <div class="h-100 p-5 bg-light border rounded-3">
-          <h2>My notifications <small>(<%= notifications.count %>)</small></h2>
-          <ul class="list-group">
-            <% notifications.rows.forEach(function(notification) { %>
-                  <li class="list-group-item"><%= notification.subject %></li>
-            <% }); %>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <footer class="pt-3 mt-4 text-muted border-top">
-      &copy; 2021
-    </footer>
-  </div>
-</main>
-
+    </main>
   </body>
 </html>
 
